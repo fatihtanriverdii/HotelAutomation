@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Data.OleDb;
+using System.Data.SqlClient;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace HotelManagerSystem
 {
@@ -23,7 +19,7 @@ namespace HotelManagerSystem
 
         }
 
-        OleDbConnection Acconnection = new OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=..\\..\\hotelSystem.accdb");
+        SqlConnection Acconnection = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
 
         private void editReservation_Load(object sender, EventArgs e)
         {
@@ -57,16 +53,16 @@ namespace HotelManagerSystem
         {
             try
             {
-                using (OleDbConnection connection = new OleDbConnection(Acconnection.ConnectionString))
+                using (SqlConnection connection = new SqlConnection(Acconnection.ConnectionString))
                 {
                     connection.Open();
 
                     string query = "SELECT * FROM customers WHERE identityNumber = @IdentityNumber";
-                    using (OleDbCommand command = new OleDbCommand(query, connection))
+                    using (SqlCommand command = new SqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@IdentityNumber", identityNumber);
 
-                        using (OleDbDataReader reader = command.ExecuteReader())
+                        using (SqlDataReader reader = command.ExecuteReader())
                         {
                             if (reader.Read())
                             {
@@ -95,8 +91,8 @@ namespace HotelManagerSystem
                                 cancel.Visible = true;
                                 delete.Visible = true;
 
-                                string updateQuery = "UPDATE rooms SET roomIsFull = false WHERE roomNumber = @RoomNumberC", roomNumberC = reader["roomNumber"].ToString();
-                                using (OleDbCommand updateCommand = new OleDbCommand(updateQuery, connection))
+                                string updateQuery = "UPDATE rooms SET roomIsFull = 0 WHERE roomNumber = @RoomNumberC", roomNumberC = reader["roomNumber"].ToString();
+                                using (SqlCommand updateCommand = new SqlCommand(updateQuery, connection))
                                 {
                                     updateCommand.Parameters.AddWithValue("@RoomNumberC", roomNumberC);
 
@@ -105,11 +101,11 @@ namespace HotelManagerSystem
 
 
                                 string queryRoom = "SELECT * FROM rooms WHERE roomNumber = @RoomNumber", roomNumber = reader["roomNumber"].ToString();
-                                using (OleDbCommand commandRoom = new OleDbCommand(queryRoom, connection))
+                                using (SqlCommand commandRoom = new SqlCommand(queryRoom, connection))
                                 {
                                     commandRoom.Parameters.AddWithValue("@RoomNumber", roomNumber);
 
-                                    using (OleDbDataReader readerR = commandRoom.ExecuteReader())
+                                    using (SqlDataReader readerR = commandRoom.ExecuteReader())
                                     {
                                         if (readerR.Read())
                                         {
@@ -164,14 +160,14 @@ namespace HotelManagerSystem
             if (classic.Checked == true)
             {
                 roomText.Items.Clear();
-                using (OleDbConnection connection = new OleDbConnection(Acconnection.ConnectionString))
+                using (SqlConnection connection = new SqlConnection(Acconnection.ConnectionString))
                 {
                     connection.Open();
 
-                    string query = "SELECT roomNumber FROM rooms WHERE roomIsFull = false AND roomType = 'classic' ";
-                    using (OleDbCommand command = new OleDbCommand(query, connection))
+                    string query = "SELECT roomNumber FROM rooms WHERE roomIsFull = 0 AND roomType = 'classic' ";
+                    using (SqlCommand command = new SqlCommand(query, connection))
                     {
-                        using (OleDbDataReader reader = command.ExecuteReader())
+                        using (SqlDataReader reader = command.ExecuteReader())
                         {
                             while (reader.Read())
                             {
@@ -190,14 +186,14 @@ namespace HotelManagerSystem
             if (suit.Checked == true)
             {
                 roomText.Items.Clear();
-                using (OleDbConnection connection = new OleDbConnection(Acconnection.ConnectionString))
+                using (SqlConnection connection = new SqlConnection(Acconnection.ConnectionString))
                 {
                     connection.Open();
 
-                    string query = "SELECT roomNumber FROM rooms WHERE roomIsFull = false AND roomType = 'suit' ";
-                    using (OleDbCommand command = new OleDbCommand(query, connection))
+                    string query = "SELECT roomNumber FROM rooms WHERE roomIsFull = 0 AND roomType = 'suit' ";
+                    using (SqlCommand command = new SqlCommand(query, connection))
                     {
-                        using (OleDbDataReader reader = command.ExecuteReader())
+                        using (SqlDataReader reader = command.ExecuteReader())
                         {
                             while (reader.Read())
                             {
@@ -229,13 +225,13 @@ namespace HotelManagerSystem
 
             try
             {
-                using (OleDbConnection connection = new OleDbConnection(Acconnection.ConnectionString))
+                using (SqlConnection connection = new SqlConnection(Acconnection.ConnectionString))
                 {
                     connection.Open();
 
                     string query = "UPDATE customers SET identityNumber = @CustomerId, cName = @Name, cSurname = @Surname, telNumber = @TelNumber, email = @Email, startDate = @StartDate, endDate = @EndDate, bedCount = @BedCount, roomNumber = @RoomNumber, totalPrice = @TotalPrice WHERE identityNumber = @CustomerId";
 
-                    using (OleDbCommand command = new OleDbCommand(query, connection))
+                    using (SqlCommand command = new SqlCommand(query, connection))
                     {
                         command.Parameters.Add("@CustomerId", OleDbType.Integer).Value = Id;
                         command.Parameters.AddWithValue("@Name", name);
@@ -251,8 +247,8 @@ namespace HotelManagerSystem
                         int rowsAffected = command.ExecuteNonQuery();
 
 
-                        string updateQuery = "UPDATE rooms SET roomIsFull = true WHERE roomNumber = @RoomNumberC";
-                        using (OleDbCommand updateCommand = new OleDbCommand(updateQuery, connection))
+                        string updateQuery = "UPDATE rooms SET roomIsFull = 1 WHERE roomNumber = @RoomNumberC";
+                        using (SqlCommand updateCommand = new SqlCommand(updateQuery, connection))
                         {
                             updateCommand.Parameters.AddWithValue("@RoomNumberC", roomNumber);
 
@@ -286,13 +282,13 @@ namespace HotelManagerSystem
 
             try
             {
-                using (OleDbConnection connection = new OleDbConnection(Acconnection.ConnectionString))
+                using (SqlConnection connection = new SqlConnection(Acconnection.ConnectionString))
                 {
                     connection.Open();
 
                     string query = "DELETE FROM customers WHERE identityNumber = @CustomerId";
 
-                    using (OleDbCommand command = new OleDbCommand(query, connection))
+                    using (SqlCommand command = new SqlCommand(query, connection))
                     {
                         command.Parameters.Add("@CustomerId", OleDbType.Integer).Value = Id;
 

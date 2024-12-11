@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Data.Common;
-using System.Data.OleDb;
+using System.Configuration;
+using System.Data.SqlClient;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace HotelManagerSystem
 {
@@ -25,7 +18,7 @@ namespace HotelManagerSystem
 
         int occupiedCount;
         int emptyCount;
-        OleDbConnection Aconnection = new OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=..\\..\\hotelSystem.accdb");
+        SqlConnection Aconnection = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
 
         private void statistics_Load(object sender, EventArgs e)
         {
@@ -34,20 +27,20 @@ namespace HotelManagerSystem
 
             try
             {
-                using (OleDbConnection connection = new OleDbConnection(Aconnection.ConnectionString))
+                using (SqlConnection connection = new SqlConnection(Aconnection.ConnectionString))
                 {
                     connection.Open();
 
                     // Suit odalarda bulunan müşteri sayısı
                     string suitQuery = "SELECT COUNT(*) FROM customers WHERE roomNumber IN (SELECT roomNumber FROM rooms WHERE roomType = 'suit')";
-                    using (OleDbCommand suitCommand = new OleDbCommand(suitQuery, connection))
+                    using (SqlCommand suitCommand = new SqlCommand(suitQuery, connection))
                     {
                         suitCount = Convert.ToInt32(suitCommand.ExecuteScalar());
                     }
 
                     // Classic odalarda bulunan müşteri sayısı
                     string classicQuery = "SELECT COUNT(*) FROM customers WHERE roomNumber IN (SELECT roomNumber FROM rooms WHERE roomType = 'classic')";
-                    using (OleDbCommand classicCommand = new OleDbCommand(classicQuery, connection))
+                    using (SqlCommand classicCommand = new SqlCommand(classicQuery, connection))
                     {
                         classicCount = Convert.ToInt32(classicCommand.ExecuteScalar());
                     }
@@ -90,12 +83,12 @@ namespace HotelManagerSystem
                 Aconnection.Open();
 
                 string sqlText = "SELECT COUNT(*) FROM rooms WHERE roomIsFull = @status";
-                OleDbCommand AccessCommand = new OleDbCommand(sqlText, Aconnection);
+                SqlCommand AccessCommand = new SqlCommand(sqlText, Aconnection);
                 AccessCommand.Parameters.AddWithValue("@status", status);
 
                 count = (int)AccessCommand.ExecuteScalar();
             }
-            catch (OleDbException ex)
+            catch (SqlException ex)
             {
                 MessageBox.Show("An error occurred: " + ex.Message);
             }

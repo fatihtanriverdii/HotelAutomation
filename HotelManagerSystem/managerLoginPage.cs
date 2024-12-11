@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+using System.Configuration;
 using System.Data;
-using System.Data.Common;
-using System.Data.OleDb;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace HotelManagerSystem
@@ -21,7 +17,7 @@ namespace HotelManagerSystem
 
         }
 
-        OleDbConnection Acconnection = new OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=..\\..\\hotelSystem.accdb");
+        SqlConnection Acconnection = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
 
         private void label1_Click(object sender, EventArgs e)
         {
@@ -29,12 +25,12 @@ namespace HotelManagerSystem
         }
         private bool IsValidUser(string username, string password)
         {
-            using (OleDbConnection connection = new OleDbConnection(Acconnection.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(Acconnection.ConnectionString))
             {
                 connection.Open();
 
                 string query = "SELECT COUNT(*) FROM manager WHERE managerID = @Username AND password = @Password";
-                using (OleDbCommand command = new OleDbCommand(query, connection))
+                using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Username", username);
                     command.Parameters.AddWithValue("@Password", password);

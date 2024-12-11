@@ -47,7 +47,7 @@
             this.label11 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.hotelManagementDataSet = new HotelManagerSystem.hotelManagementDataSet();
+            //this.hotelManagementDataSet = new HotelManagerSystem.hotelManagementDataSet();
             this.adminBindingSource = new System.Windows.Forms.BindingSource(this.components);
          //   this.adminTableAdapter = new HotelManagerSystem.hotelManagementDataSetTableAdapters.adminTableAdapter();
             this.label14 = new System.Windows.Forms.Label();
@@ -73,7 +73,7 @@
             this.label25 = new System.Windows.Forms.Label();
             this.totalPriceText = new System.Windows.Forms.Label();
             this.label27 = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.hotelManagementDataSet)).BeginInit();
+            //((System.ComponentModel.ISupportInitialize)(this.hotelManagementDataSet)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.adminBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
@@ -257,13 +257,13 @@
             // 
             // hotelManagementDataSet
             // 
-            this.hotelManagementDataSet.DataSetName = "hotelManagementDataSet";
-            this.hotelManagementDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            //this.hotelManagementDataSet.DataSetName = "hotelManagementDataSet";
+            //this.hotelManagementDataSet.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
             // adminBindingSource
             // 
             this.adminBindingSource.DataMember = "admin";
-            this.adminBindingSource.DataSource = this.hotelManagementDataSet;
+            //this.adminBindingSource.DataSource = this.hotelManagementDataSet;
             // 
             // adminTableAdapter
             // 
@@ -609,7 +609,7 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.ComboBox comboBox1;
-        private hotelManagementDataSet hotelManagementDataSet;
+        //private hotelManagementDataSet hotelManagementDataSet;
         private System.Windows.Forms.BindingSource adminBindingSource;
       //  private hotelManagementDataSetTableAdapters.adminTableAdapter adminTableAdapter;
         private System.Windows.Forms.Label label14;
