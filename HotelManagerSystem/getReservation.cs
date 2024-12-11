@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Data.OleDb;
+using System.Configuration;
+using System.Data.SqlClient;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace HotelManagerSystem
 {
@@ -23,7 +17,7 @@ namespace HotelManagerSystem
 
         }
 
-        OleDbConnection Acconnection = new OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=..\\..\\hotelSystem.accdb");
+        SqlConnection Acconnection = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
 
         private void label2_Click(object sender, EventArgs e)
         {
@@ -33,15 +27,15 @@ namespace HotelManagerSystem
         private void getReservation_Load(object sender, EventArgs e)
         {
 
-            using (OleDbConnection connection = new OleDbConnection(Acconnection.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(Acconnection.ConnectionString))
             {
 
 
                 connection.Open();
                 string query2 = "SELECT internationalCode FROM country_codes WHERE internationalCode IS NOT null ORDER BY internationalCode ASC";
-                using (OleDbCommand command = new OleDbCommand(query2, connection))
+                using (SqlCommand command = new SqlCommand(query2, connection))
                 {
-                    using (OleDbDataReader reader = command.ExecuteReader())
+                    using (SqlDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
                         {
@@ -140,7 +134,7 @@ namespace HotelManagerSystem
             int guest = (int)numericUpDown1.Value;
             string totalPrice = totalPriceText.Text;
 
-            using (OleDbConnection connection = new OleDbConnection(Acconnection.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(Acconnection.ConnectionString))
             {
 
 
@@ -149,7 +143,7 @@ namespace HotelManagerSystem
                "VALUES (@IdentityNo, @Name, @Surname, @PhoneNumber, @Email, " +
                "@CheckInDate, @CheckOutDate, @Guest, @RoomNumber, @TotalPrice)";
 
-                using (OleDbCommand command = new OleDbCommand(query, connection))
+                using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@IdentityNo", identityNo);
                     command.Parameters.AddWithValue("@Name", name);
@@ -168,8 +162,8 @@ namespace HotelManagerSystem
 
                     if (rowsAffected > 0)
                     {
-                        string updateQuery = "UPDATE rooms SET roomIsFull = true WHERE roomNumber = @RoomNumber";
-                        using (OleDbCommand updateCommand = new OleDbCommand(updateQuery, connection))
+                        string updateQuery = "UPDATE rooms SET roomIsFull = 1 WHERE roomNumber = @RoomNumber";
+                        using (SqlCommand updateCommand = new SqlCommand(updateQuery, connection))
                         {
                             updateCommand.Parameters.AddWithValue("@RoomNumber", roomNumber);
 
@@ -213,14 +207,14 @@ namespace HotelManagerSystem
             totalPriceText.Text = "0$";
             comboBox1.Items.Clear();
             comboBox1.Text = null;
-            using (OleDbConnection connection = new OleDbConnection(Acconnection.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(Acconnection.ConnectionString))
             {
                 connection.Open();
 
-                string query = "SELECT roomNumber FROM rooms WHERE roomIsFull = false AND roomType = 'classic' ";
-                using (OleDbCommand command = new OleDbCommand(query, connection))
+                string query = "SELECT roomNumber FROM rooms WHERE roomIsFull = 0 AND roomType = 'classic' ";
+                using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    using (OleDbDataReader reader = command.ExecuteReader())
+                    using (SqlDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
                         {
@@ -238,14 +232,14 @@ namespace HotelManagerSystem
             totalPriceText.Text = "0$";
             comboBox1.Items.Clear();
             comboBox1.Text = null;
-            using (OleDbConnection connection = new OleDbConnection(Acconnection.ConnectionString))
+            using (SqlConnection connection = new SqlConnection(Acconnection.ConnectionString))
             {
                 connection.Open();
 
-                string query = "SELECT roomNumber FROM rooms WHERE roomIsFull = false AND roomType = 'suit' ";
-                using (OleDbCommand command = new OleDbCommand(query, connection))
+                string query = "SELECT roomNumber FROM rooms WHERE roomIsFull = 0 AND roomType = 'suit' ";
+                using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    using (OleDbDataReader reader = command.ExecuteReader())
+                    using (SqlDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
                         {

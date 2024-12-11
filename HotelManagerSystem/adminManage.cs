@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Data.OleDb;
+using System.Configuration;
+using System.Data.SqlClient;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace HotelManagerSystem
@@ -19,7 +14,7 @@ namespace HotelManagerSystem
             this.BackColor = ColorTranslator.FromHtml("#162d55");
         }
 
-        OleDbConnection Aconnection = new OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=..\\..\\hotelSystem.accdb");
+        SqlConnection Aconnection = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
 
         private void backButton_Click(object sender, EventArgs e)
         {
@@ -44,10 +39,10 @@ namespace HotelManagerSystem
             textBox5.Enabled = true;
             textBox4.Clear();
             comboBox1.SelectedItem = null;
-            OleDbCommand AccessCommand = new OleDbCommand();
+            SqlCommand AccessCommand = new SqlCommand();
             AccessCommand.Connection = Aconnection;
             AccessCommand.CommandText = ("Select * from manager");
-            OleDbDataReader read = AccessCommand.ExecuteReader();
+            SqlDataReader read = AccessCommand.ExecuteReader();
 
             while (read.Read())
             {
@@ -73,7 +68,7 @@ namespace HotelManagerSystem
             string sqlText = "INSERT INTO manager (managerID, [password], mName, mPhone, [position]) " +
                          "VALUES (@managerID, @password, @mName, @mPhone, @position)";
 
-            OleDbCommand AccessCommand = new OleDbCommand(sqlText, Aconnection);
+            SqlCommand AccessCommand = new SqlCommand(sqlText, Aconnection);
             AccessCommand.Parameters.AddWithValue("@managerID", Convert.ToInt32(textBox5.Text));
             AccessCommand.Parameters.AddWithValue("@password", textBox3.Text);
             AccessCommand.Parameters.AddWithValue("@mName", textBox1.Text);
@@ -103,16 +98,16 @@ namespace HotelManagerSystem
         {
             try
             {
-                using (OleDbConnection connection = new OleDbConnection(Aconnection.ConnectionString))
+                using (SqlConnection connection = new SqlConnection(Aconnection.ConnectionString))
                 {
                     connection.Open();
 
                     string query = "SELECT * FROM manager WHERE managerID = @managerID";
-                    using (OleDbCommand command = new OleDbCommand(query, connection))
+                    using (SqlCommand command = new SqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@managerID", ID);
 
-                        using (OleDbDataReader reader = command.ExecuteReader())
+                        using (SqlDataReader reader = command.ExecuteReader())
                         {
                             if (reader.Read())
                             {
@@ -148,7 +143,7 @@ namespace HotelManagerSystem
             int ID = Convert.ToInt32(sID);
             Aconnection.Open();
 
-            OleDbCommand AccessCommand = new OleDbCommand();
+            SqlCommand AccessCommand = new SqlCommand();
             AccessCommand.Connection = Aconnection;
             AccessCommand.CommandText = "DELETE FROM manager WHERE managerID = @managerID";
             AccessCommand.Parameters.AddWithValue("@managerID", ID);
@@ -183,7 +178,7 @@ namespace HotelManagerSystem
 
             string sqlText = "UPDATE manager SET managerID = @managerID, [password] = @password, mName = @mName, mPhone = @mPhone, [position] = @position WHERE managerID = @managerID";
 
-            OleDbCommand AccessCommand = new OleDbCommand(sqlText, Aconnection);
+            SqlCommand AccessCommand = new SqlCommand(sqlText, Aconnection);
             AccessCommand.Parameters.AddWithValue("@managerID", ID);
             AccessCommand.Parameters.AddWithValue("@password", textBox3.Text);
             AccessCommand.Parameters.AddWithValue("@mName", textBox1.Text);

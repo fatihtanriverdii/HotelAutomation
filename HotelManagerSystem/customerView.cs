@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Data.Common;
-using System.Data.OleDb;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Configuration;
+using System.Data.SqlClient;
 using System.Windows.Forms;
 
 namespace HotelManagerSystem
@@ -15,7 +8,8 @@ namespace HotelManagerSystem
     public partial class customerView : Form
     {
 
-        OleDbConnection Acconnection = new OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=..\\..\\hotelSystem.accdb");
+        SqlConnection Acconnection = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+
         public customerView()
         {
             InitializeComponent();
@@ -30,15 +24,15 @@ namespace HotelManagerSystem
         {
             try
             {
-                using (OleDbConnection connection = new OleDbConnection(Acconnection.ConnectionString))
+                using (SqlConnection connection = new SqlConnection(Acconnection.ConnectionString))
                 {
                     connection.Open();
 
                     string query = "SELECT * FROM customers";
 
-                    using (OleDbCommand command = new OleDbCommand(query, connection))
+                    using (SqlCommand command = new SqlCommand(query, connection))
                     {
-                        using (OleDbDataReader reader = command.ExecuteReader())
+                        using (SqlDataReader reader = command.ExecuteReader())
                         {
                             while (reader.Read())
                             {

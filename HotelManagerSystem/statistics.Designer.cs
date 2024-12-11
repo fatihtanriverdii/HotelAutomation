@@ -41,7 +41,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.backButton = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.country_codesTableAdapter1 = new HotelManagerSystem.hotelSystemDataSetTableAdapters.country_codesTableAdapter();
+            //this.country_codesTableAdapter1 = new HotelManagerSystem.hotelSystemDataSetTableAdapters.country_codesTableAdapter();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.label4 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -136,7 +136,7 @@
             // 
             // country_codesTableAdapter1
             // 
-            this.country_codesTableAdapter1.ClearBeforeFill = true;
+            //this.country_codesTableAdapter1.ClearBeforeFill = true;
             // 
             // chart1
             // 
@@ -206,7 +206,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button backButton;
         private System.Windows.Forms.ToolTip toolTip1;
-        private hotelSystemDataSetTableAdapters.country_codesTableAdapter country_codesTableAdapter1;
+        //private hotelSystemDataSetTableAdapters.country_codesTableAdapter country_codesTableAdapter1;
         private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
         private System.Windows.Forms.Label label4;
     }

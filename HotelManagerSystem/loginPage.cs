@@ -1,21 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+using System.Configuration;
 using System.Data;
-using System.Data.OleDb;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace HotelManagerSystem
 {
    public partial class loginPage : Form
 {
-    OleDbConnection Acconnection = new OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=..\\..\\hotelSystem.accdb");
+        SqlConnection Acconnection = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
 
-    public loginPage()
+        public loginPage()
     {
         InitializeComponent();
         this.BackColor = ColorTranslator.FromHtml("#162d55");
@@ -60,13 +57,13 @@ namespace HotelManagerSystem
     private bool IsValidUser(string username, string password)
     {
             Acconnection.Open();
-            OleDbCommand AccessCommand = new OleDbCommand();
+            SqlCommand AccessCommand = new SqlCommand();
             AccessCommand.Connection = Acconnection;
           
             AccessCommand.CommandText = ("SELECT * FROM staff WHERE staffID = @Username AND password = @Password");
             AccessCommand.Parameters.AddWithValue("@Username", username);
             AccessCommand.Parameters.AddWithValue("@Password", password);
-            OleDbDataReader reader = AccessCommand.ExecuteReader();
+            SqlDataReader reader = AccessCommand.ExecuteReader();
        
             if (reader.Read())
             {

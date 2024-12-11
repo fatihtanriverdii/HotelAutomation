@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Data.Common;
-using System.Data.OleDb;
+using System.Configuration;
+using System.Data.SqlClient;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace HotelManagerSystem
@@ -20,7 +14,7 @@ namespace HotelManagerSystem
             this.BackColor = ColorTranslator.FromHtml("#162d55");
         }
 
-        OleDbConnection Aconnection = new OleDbConnection("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=..\\..\\hotelSystem.accdb");
+        SqlConnection Aconnection = new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
 
 
         private void staffManage_Load(object sender, EventArgs e)
@@ -38,10 +32,10 @@ namespace HotelManagerSystem
             textBox5.Enabled = true;
             textBox4.Clear();
             comboBox1.SelectedItem = null;
-            OleDbCommand AccessCommand = new OleDbCommand();
+            SqlCommand AccessCommand = new SqlCommand();
             AccessCommand.Connection = Aconnection;
             AccessCommand.CommandText = ("Select * from staff");
-            OleDbDataReader read = AccessCommand.ExecuteReader();
+            SqlDataReader read = AccessCommand.ExecuteReader();
 
             while (read.Read())
             {
@@ -67,7 +61,7 @@ namespace HotelManagerSystem
             string sqlText = "INSERT INTO staff (staffID, [password], staffName, staffPhone, [position]) " +
                          "VALUES (@staffID, @password, @staffName, @staffPhone, @position)";
 
-            OleDbCommand AccessCommand = new OleDbCommand(sqlText, Aconnection);
+            SqlCommand AccessCommand = new SqlCommand(sqlText, Aconnection);
             AccessCommand.Parameters.AddWithValue("@staffID", Convert.ToInt32(textBox5.Text));
             AccessCommand.Parameters.AddWithValue("@password", textBox3.Text);
             AccessCommand.Parameters.AddWithValue("@staffName", textBox1.Text);
@@ -103,16 +97,16 @@ namespace HotelManagerSystem
         {
             try
             {
-                using (OleDbConnection connection = new OleDbConnection(Aconnection.ConnectionString))
+                using (SqlConnection connection = new SqlConnection(Aconnection.ConnectionString))
                 {
                     connection.Open();
 
                     string query = "SELECT * FROM staff WHERE staffID = @staffID";
-                    using (OleDbCommand command = new OleDbCommand(query, connection))
+                    using (SqlCommand command = new SqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@staffID", ID);
 
-                        using (OleDbDataReader reader = command.ExecuteReader())
+                        using (SqlDataReader reader = command.ExecuteReader())
                         {
                             if (reader.Read())
                             {
@@ -148,7 +142,7 @@ namespace HotelManagerSystem
             int ID = Convert.ToInt32(sID);
             Aconnection.Open();
 
-            OleDbCommand AccessCommand = new OleDbCommand();
+            SqlCommand AccessCommand = new SqlCommand();
             AccessCommand.Connection = Aconnection;
             AccessCommand.CommandText = "DELETE FROM staff WHERE staffID = @sID";
             AccessCommand.Parameters.AddWithValue("@sID", ID);
@@ -182,7 +176,7 @@ namespace HotelManagerSystem
 
             string sqlText = "UPDATE staff SET staffID = @staffID, [password] = @password, staffName = @staffName, staffPhone = @staffPhone, [position] = @position WHERE staffID = @staffID";
 
-            OleDbCommand AccessCommand = new OleDbCommand(sqlText, Aconnection);
+            SqlCommand AccessCommand = new SqlCommand(sqlText, Aconnection);
             AccessCommand.Parameters.AddWithValue("@staffID", ID);
             AccessCommand.Parameters.AddWithValue("@password", textBox3.Text);
             AccessCommand.Parameters.AddWithValue("@staffName", textBox1.Text);
